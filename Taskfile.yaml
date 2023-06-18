@@ -1,0 +1,23 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  build:
+    cmds:
+      - ./gradlew build
+      - cp my-tracker/MyTracker.gdap my-tracker/build/outputs/aar/MyTracker.gdap
+
+  example:
+    deps: [build]
+    cmds:
+      - cp my-tracker/build/outputs/aar/review-debug.aar ../../example/my-tracker/android/plugins/mytracker-release.aar
+      - cp my-tracker/build/outputs/aar/MyTracker.gdap ../../example/my-tracker/android/plugins/MyTracker.gdap
