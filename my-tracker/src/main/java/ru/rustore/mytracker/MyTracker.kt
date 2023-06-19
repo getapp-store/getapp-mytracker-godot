@@ -86,34 +86,37 @@ class MyTracker(godot: Godot?) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun steLange(lang: String) {
+    fun setLang(lang: String) {
         Tracker.getTrackerParams().setLang(lang)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @UsedByGodot
-    fun trackInviteEvent(params: Map<String, String>?) {
-        if (params != null) {
-            Tracker.trackInviteEvent(params)
-        } else {
-            Tracker.trackInviteEvent()
-        }
+    fun trackInviteEvent(p: org.godotengine.godot.Dictionary) {
+        val params = p.toMap().filterValues {
+            it is String
+        } as? Map<String, String>
+
+        Tracker.trackInviteEvent(params)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @UsedByGodot
-    fun trackLevelEvent(level: Int, params: Map<String, String>?) {
-        if (params != null) {
-            Tracker.trackLevelEvent(level, params)
-        } else {
-            Tracker.trackLevelEvent()
-        }
+    fun trackLevelEvent(level: Int, p: org.godotengine.godot.Dictionary) {
+        val params = p.toMap().filterValues {
+             it is String
+         } as? Map<String, String>
+
+        Tracker.trackLevelEvent(level, params)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @UsedByGodot
-    fun trackEvent(name: String, params: Map<String, String>?) {
-        if (params != null) {
-            Tracker.trackEvent(name, params)
-        } else {
-            Tracker.trackEvent(name)
-        }
+    fun trackEvent(name: String, p: org.godotengine.godot.Dictionary) {
+        val params = p.toMap().filterValues {
+            it is String
+        } as? Map<String, String>
+
+        Tracker.trackEvent(name, params)
     }
 }
