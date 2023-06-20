@@ -19,5 +19,5 @@ tasks:
   example:
     deps: [build]
     cmds:
-      - cp my-tracker/build/outputs/aar/review-debug.aar ../../example/my-tracker/android/plugins/mytracker-release.aar
-      - cp my-tracker/build/outputs/aar/MyTracker.gdap ../../example/my-tracker/android/plugins/MyTracker.gdap
+      - cp my-tracker/build/outputs/aar/mytracker-debug.aar ./example/android/plugins/mytracker-release.aar
+      - cp my-tracker/build/outputs/aar/MyTracker.gdap ./example/android/plugins/MyTracker.gdap

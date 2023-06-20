@@ -1,5 +1,9 @@
 package ru.rustore.mytracker
 
+import com.my.tracker.ads.AdEvent
+import com.my.tracker.ads.AdEventBuilder
+import com.my.tracker.ads.AdFormat
+import com.my.tracker.ads.AdNetwork
 import com.my.tracker.MyTracker as Tracker
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -118,5 +122,58 @@ class MyTracker(godot: Godot?) : GodotPlugin(godot) {
         } as? Map<String, String>
 
         Tracker.trackEvent(name, params)
+    }
+
+    @UsedByGodot
+    fun trackAdEvent(name: String, network: Int, params: org.godotengine.godot.Dictionary) {
+        var event: AdEventBuilder? = null
+
+        if (name == EVENT_IMPRESSION) {
+            event = AdEventBuilder.newImpressionBuilder(network)
+        }
+
+        if (name == EVENT_CLICK) {
+            event = AdEventBuilder.newClickBuilder(network)
+        }
+
+        if (name == EVENT_REVENUE) {
+            event = AdEventBuilder.newRevenueBuilder(
+                network,
+                params.get(AD_REVENUE) as? Double ?: 0.0,
+                params.get(AD_CURRENCY) as? String ?: "")
+        }
+
+        if (params.containsKey(AD_SOURCE)) {
+            event?.withSource(params[AD_SOURCE] as? String)
+        }
+
+        if (params.containsKey(AD_ID)) {
+            event?.withAdId(params[AD_ID] as? String)
+        }
+
+        if (params.containsKey(AD_PLACEMENT_ID)) {
+            event?.withAdId(params[AD_PLACEMENT_ID] as? String)
+        }
+
+        if (params.containsKey(AD_FORMAT)) {
+            event?.withAdFormat(params[AD_FORMAT] as? String)
+        }
+
+        Tracker.trackAdEvent(event?.build())
+
+        AdNetwork.ADMOB
+    }
+
+    companion object {
+        const val EVENT_IMPRESSION = "impression"
+        const val EVENT_CLICK = "click"
+        const val EVENT_REVENUE = "revenue"
+
+        const val AD_REVENUE = "revenue"
+        const val AD_CURRENCY = "currency"
+        const val AD_SOURCE = "source"
+        const val AD_ID = "ad_id"
+        const val AD_PLACEMENT_ID = "placement_id"
+        const val AD_FORMAT = "format"
     }
 }
