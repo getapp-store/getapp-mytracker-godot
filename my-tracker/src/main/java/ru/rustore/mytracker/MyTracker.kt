@@ -4,10 +4,12 @@ import com.my.tracker.ads.AdEvent
 import com.my.tracker.ads.AdEventBuilder
 import com.my.tracker.ads.AdFormat
 import com.my.tracker.ads.AdNetwork
+import org.godotengine.godot.Dictionary
 import com.my.tracker.MyTracker as Tracker
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
+import org.json.JSONObject
 
 class MyTracker(godot: Godot?) : GodotPlugin(godot) {
     override fun getPluginName(): String {
@@ -94,38 +96,23 @@ class MyTracker(godot: Godot?) : GodotPlugin(godot) {
         Tracker.getTrackerParams().setLang(lang)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @UsedByGodot
-    fun trackInviteEvent(p: org.godotengine.godot.Dictionary) {
-        val params = p.toMap().filterValues {
-            it is String
-        } as? Map<String, String>
-
-        Tracker.trackInviteEvent(params)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @UsedByGodot
-    fun trackLevelEvent(level: Int, p: org.godotengine.godot.Dictionary) {
-        val params = p.toMap().filterValues {
-             it is String
-         } as? Map<String, String>
-
-        Tracker.trackLevelEvent(level, params)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @UsedByGodot
-    fun trackEvent(name: String, p: org.godotengine.godot.Dictionary) {
-        val params = p.toMap().filterValues {
-            it is String
-        } as? Map<String, String>
-
-        Tracker.trackEvent(name, params)
+    fun trackInviteEvent(params: Dictionary) {
+        Tracker.trackInviteEvent(params.map { e -> e.key to e.value.toString() }.toMap())
     }
 
     @UsedByGodot
-    fun trackAdEvent(name: String, network: Int, params: org.godotengine.godot.Dictionary) {
+    fun trackLevelEvent(level: Int, params: Dictionary) {
+        Tracker.trackLevelEvent(level, params.map { e -> e.key to e.value.toString() }.toMap())
+    }
+
+    @UsedByGodot
+    fun trackEvent(name: String, params: Dictionary) {
+        Tracker.trackEvent(name, params.map { e -> e.key to e.value.toString() }.toMap())
+    }
+
+    @UsedByGodot
+    fun trackAdEvent(name: String, network: Int, params: Dictionary) {
         var event: AdEventBuilder? = null
 
         if (name == EVENT_IMPRESSION) {
@@ -162,6 +149,26 @@ class MyTracker(godot: Godot?) : GodotPlugin(godot) {
         Tracker.trackAdEvent(event?.build())
 
         AdNetwork.ADMOB
+    }
+
+    @UsedByGodot
+    fun trackPurchaseEvent(
+        sku: String,
+        purchase: String,
+        signature: String,
+        params: Dictionary
+    ) {
+        Tracker.trackPurchaseEvent(
+            JSONObject(sku),
+            JSONObject(purchase),
+            signature,
+            params.map { e -> e.key to e.value.toString() }.toMap()
+        )
+    }
+
+    @UsedByGodot
+    fun flush() {
+        Tracker.flush()
     }
 
     companion object {
