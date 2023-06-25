@@ -1,8 +1,6 @@
 package ru.rustore.mytracker
 
-import com.my.tracker.ads.AdEvent
 import com.my.tracker.ads.AdEventBuilder
-import com.my.tracker.ads.AdFormat
 import com.my.tracker.ads.AdNetwork
 import org.godotengine.godot.Dictionary
 import com.my.tracker.MyTracker as Tracker
@@ -10,6 +8,7 @@ import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 import org.json.JSONObject
+
 
 class MyTracker(godot: Godot?) : GodotPlugin(godot) {
     override fun getPluginName(): String {
