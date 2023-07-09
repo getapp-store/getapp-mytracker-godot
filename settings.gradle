@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "geta-mytracker-godot"
+rootProject.name = "getapp-mytracker-godot"
 include ':app'
 include ':godot-lib'
 include ':my-tracker'
